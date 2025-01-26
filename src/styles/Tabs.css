@@ -21,6 +21,7 @@
   
   .tab-content {
     padding: 1rem;
+    height: 400px;
   }
   
   /* Responsive Design */
@@ -34,6 +35,9 @@
       flex: unset;
       margin: 0.2rem;
       font-size: 0.9rem; 
+    }
+    .tab-content{
+      height: 200px;
     }
   }
   
