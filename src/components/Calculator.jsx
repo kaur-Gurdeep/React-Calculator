@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/Calculator.css';
 
-function Calculator() {
+function Calculator({ memory, setMemory }) {
   const [currentInput, setCurrentInput] = useState(""); // Tracks the current number
   const [previousValue, setPreviousValue] = useState(null); // Stores the previous value
   const [operator, setOperator] = useState(null); // Stores the selected operator
   const [result, setResult] = useState(null); // Stores the result of the calculation
   const [calculationHistory, setCalculationHistory] = useState(""); // Tracks the last result or expression
-  const [memory, setMemory] = useState(0); //Memory Value
-  // const [isMemoryStored, setIsMemoryStored] = useState(false);
 
   const handleNumberClick = (num) => {
     if (currentInput === "0" && num !== "0") {
@@ -103,24 +101,45 @@ function Calculator() {
   };
 
   const handleMemoryClear = () => {
-    setMemory(0);
-  }
+    setMemory([]);
+  };
+
   const handleMemoryRecall = () => {
-    setCurrentInput(memory.toString());
-    setCalculationHistory(`Memory Recall: ${memory}`);
-  }
+    if (memory.length > 0) {
+      const lastMemoryValue = memory[memory.length - 1];
+      setCurrentInput(lastMemoryValue.toString()); // Show the memory value in the result div
+    }
+  };
+
   const handleMemoryAdd = () => {
-    setMemory(memory + parseFloat(currentInput || 0));
-    setCalculationHistory(`Memory Add: ${currentInput}`);
-  }
+    if (memory.length > 0) {
+      const lastMemoryValue = memory[memory.length - 1];
+      const current = parseFloat(currentInput || result || 0);
+      const newMemoryValue = lastMemoryValue + current;
+      setMemory([...memory.slice(0, memory.length - 1), newMemoryValue]);
+      setCalculationHistory(`${current}`);
+    }
+  };
+
   const handleMemorySubtract = () => {
-    setMemory(memory - parseFloat(currentInput || 0));
-    setCalculationHistory(`Memory Subtract: ${currentInput}`);
-  }
+    if (memory.length > 0) {
+      const lastMemoryValue = memory[memory.length - 1];
+      const current = parseFloat(currentInput || result || 0);
+      const newMemoryValue = lastMemoryValue - current;
+      setMemory([...memory.slice(0, memory.length - 1), newMemoryValue]);
+      setCalculationHistory(`${current}`);
+    }
+  };
+
   const handleMemorySave = () => {
-    setMemory(parseFloat(currentInput || 0));
-    setCalculationHistory(`Memory Save: ${currentInput}`);
-  }
+    if (currentInput) {
+      const current = parseFloat(currentInput);
+      setMemory([...memory, current]); // Save only the current input value
+    } else if (result) {
+      const current = parseFloat(result);
+      setMemory([...memory, current]); // Save the result if there's no current input
+    }
+  };
 
   return (
     <div className="calculator">
@@ -134,11 +153,11 @@ function Calculator() {
 
       {/* Memory and Operation Buttons */}
       <div className="memory-operations">
-        <button onClick={handleMemoryClear}>MC</button>
-        <button onClick={handleMemoryRecall}>MR</button>
-        <button onClick={handleMemoryAdd}>M+</button>
-        <button onClick={handleMemorySubtract}>M-</button>
-        <button onClick={handleMemorySave}>MS</button>
+         <button onClick={handleMemoryClear}>MC</button> {/*Clears all stored memory values*/}
+        <button onClick={handleMemoryRecall}>MR</button> {/*Displays the most recently saved memory value in the result div*/}
+        <button onClick={handleMemoryAdd}>M+</button> {/*Adds the current result or currentInput value to the last saved memory value*/}
+        <button onClick={handleMemorySubtract}>M-</button> {/*Subtracts the current result or currentInput value from the last saved memory value*/}
+        <button onClick={handleMemorySave}>MS</button> {/*Stores the current input value in memory without overwriting previous memory values*/}
       </div>
 
       {/* Calculator Buttons */}
