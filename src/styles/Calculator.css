@@ -66,21 +66,19 @@
     background-color: #cb9227;
   }
 
-/* Disabled Button Styles */
 button:disabled {
   background-color: #666;  
   color: #bbb;  
-  /* cursor: not-allowed;   */
 }
 
 button:disabled:hover {
   background-color: #666;  
 }
   
-  /* Responsive Design */
+   /* Media Query */
   @media (max-width: 768px) {
     .buttons {
-      grid-template-columns: repeat(3, 1fr); 
+      grid-template-columns: repeat(4, 1fr); 
     }
   
     button {

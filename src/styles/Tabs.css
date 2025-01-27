@@ -25,7 +25,7 @@
     height: 550px;
   }
   
-  /* Responsive Design */
+   /* Media Query */
   @media (max-width: 768px) {
     .tabs {
       justify-content: center; 

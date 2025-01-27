@@ -3,7 +3,7 @@
     flex-wrap: wrap; 
     background-color: #1e1e1e;
     color: #fff;
-    width: 700px;
+    width: 730px;
   }
   
   .calculator-section {
@@ -25,11 +25,11 @@
     overflow-y: auto;
   }
   
-  /* Responsive Design */
+  /* Media Query */
   @media (max-width: 768px) {
     .app-container {
       flex-direction: column; 
-      width: 300px;
+      width: 350px;
     }
   
     .calculator-section {

@@ -15,6 +15,7 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
 
+   /* Media Query */
     @media (max-width: 768px) {
     .memory-tab {
       padding: 0rem;

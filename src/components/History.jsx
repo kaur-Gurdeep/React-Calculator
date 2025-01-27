@@ -1,12 +1,19 @@
 import React from 'react';
-import Calculator from './Calculator.jsx';
 
-function History() {
+function History({ history }) {
   return (
     <div className="history-tab">
-      <p>No history</p>
+      {history.length === 0 ? (
+        <p>There's no history yet</p>
+      ) : (
+        history.map((entry, index) => (
+          <div key={index}>
+            <p>{entry.expression}  {entry.result}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 }
 
-export default History
+export default History;

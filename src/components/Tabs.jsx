@@ -3,11 +3,12 @@ import History from './History.jsx';
 import Memory from './Memory.jsx';
 import '../styles/Tabs.css';
 
-function Tabs({ memory }) {
+function Tabs({ memory, history }) {
   const [activeTab, changeTab] = useState('History');
 
   return (
     <div className="tabs-section">
+      
       {/* Tabs Buttons */}
       <div className="tabs">
         <button
@@ -27,7 +28,7 @@ function Tabs({ memory }) {
 
       {/* Tab Content */}
       <div className="tab-content">
-        {activeTab === 'History' ? <History /> : <Memory memory={memory} />}
+        {activeTab === 'History' ? <History history={history}/> : <Memory memory={memory} />}
       </div>
     </div>
   );
