@@ -2,6 +2,7 @@
     display: flex;
     background-color: #333;
     padding: 0.5rem;
+    overflow-x: auto;
   }
   
   .tabs button {
@@ -20,8 +21,8 @@
   }
   
   .tab-content {
-    padding: 1rem;
-    height: 400px;
+    padding: 0.5rem;
+    height: 550px;
   }
   
   /* Responsive Design */
@@ -37,7 +38,7 @@
       font-size: 0.9rem; 
     }
     .tab-content{
-      height: 200px;
+      height: 100px;
     }
   }
   

@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
 import '../styles/Calculator.css';
 
-function Calculator({ memory, setMemory }) {
+function Calculator({ memory, setMemory}) {
   const [currentInput, setCurrentInput] = useState(""); // Tracks the current number
   const [previousValue, setPreviousValue] = useState(null); // Stores the previous value
   const [operator, setOperator] = useState(null); // Stores the selected operator
   const [result, setResult] = useState(null); // Stores the result of the calculation
   const [calculationHistory, setCalculationHistory] = useState(""); // Tracks the last result or expression
+  const [isResultFinal, setIsResultFinal] = useState(false);
 
   const handleNumberClick = (num) => {
-    if (currentInput === "0" && num !== "0") {
+    if (isResultFinal) {
+      // Reset everything for a fresh calculation after a result
       setCurrentInput(num);
+      setResult(null);
+      setCalculationHistory(""); // Clear history for a fresh start
+      setIsResultFinal(false); // Reset the result state
     } else if (result !== null) {
-      setCurrentInput(num); // Start fresh with the clicked number
-      setResult(null); // Reset result after using it
-      setCalculationHistory(""); // Clear the calculation history
-    } else if (operator !== null && currentInput === "") {
+      // Handle fresh calculation after showing a result
+      setCurrentInput(num);
+      setResult(null);
+      setCalculationHistory(""); // Clear history for a fresh start
+    } else if (operator && currentInput === "") {
+      // Start entering new input after an operator is selected
+      setCurrentInput(num);
+    } else if (currentInput === "0") {
+      // Prevent leading zeroes
       setCurrentInput(num);
     } else {
+      // Append the new number to the current input
       setCurrentInput((prev) => prev + num);
     }
   };
+  
+  
 
   const handleOperatorClick = (op) => {
     if (op === "%" && previousValue !== null && currentInput !== "") {
@@ -64,7 +77,8 @@ function Calculator({ memory, setMemory }) {
           calculation = previousValue * current;
           break;
         case "/":
-          calculation = current !== 0 ? previousValue / current : "Error";
+          calculation = current === 0 ? "Error" : previousValue / current;
+          // calculation = current !== 0 ? previousValue / current : "Error";
           break;
         case "%":
           calculation = previousValue % current;
@@ -141,20 +155,81 @@ function Calculator({ memory, setMemory }) {
     }
   };
 
+  const handleReciprocal = () => {
+    if(currentInput != ""){
+      const value = parseFloat(currentInput);
+      if(value === 0){
+        setCurrentInput("Error");
+      }
+      else
+      {
+        const result = 1/value;
+        setCurrentInput(result.toString());
+        setCalculationHistory(`1/(${value})`);
+      }
+    }
+
+  }
+  const handleSquare = () => {
+    if (currentInput !== "") {
+      const value = parseFloat(currentInput);
+      const result = value * value;
+      setCurrentInput(result.toString());
+      setCalculationHistory(`(${value})²`);
+      setIsResultFinal(true);
+    }
+  };
+
+ const handleSquareRoot = () => {
+  if (currentInput !== "") {
+    const value = parseFloat(currentInput);
+    if (value < 0) {
+      setCurrentInput("Error"); // Square root of a negative number is undefined
+    } else {
+      const result = Math.sqrt(value);
+      setCurrentInput(result.toString());
+      setCalculationHistory(`√(${value})`);
+      setIsResultFinal(true);
+    }
+  }
+};
+
+const handleNegate = () => {
+  if(currentInput !== "") {
+    const value = parseFloat(currentInput);
+    if(value === 0){
+      setCurrentInput("0");
+    }
+    else{
+      const result = -value;
+      setCurrentInput(result.toString()); 
+    }
+  }
+}
+const handleDecimal = () => {
+  // If there's no input, start with '0.'
+  if (currentInput === "") {
+    setCurrentInput("0.");
+  } else if (!currentInput.includes(".")) {
+    // If the input does not already contain a decimal point, append one
+    setCurrentInput(currentInput + ".");
+  }
+};
+
   return (
     <div className="calculator">
       {/* Display */}
       <div className="display">
         <div className="calculation">{calculationHistory}</div>
         <div className="result">
-          {result !== null ? result : currentInput || previousValue}
+          {result !== null ? result : currentInput || previousValue || "0"}
         </div>
       </div>
 
       {/* Memory and Operation Buttons */}
       <div className="memory-operations">
-         <button onClick={handleMemoryClear}>MC</button> {/*Clears all stored memory values*/}
-        <button onClick={handleMemoryRecall}>MR</button> {/*Displays the most recently saved memory value in the result div*/}
+         <button onClick={handleMemoryClear} disabled={memory.length === 0}>MC</button> {/*Clears all stored memory values*/}
+        <button onClick={handleMemoryRecall} disabled={memory.length === 0}>MR</button> {/*Displays the most recently saved memory value in the result div*/}
         <button onClick={handleMemoryAdd}>M+</button> {/*Adds the current result or currentInput value to the last saved memory value*/}
         <button onClick={handleMemorySubtract}>M-</button> {/*Subtracts the current result or currentInput value from the last saved memory value*/}
         <button onClick={handleMemorySave}>MS</button> {/*Stores the current input value in memory without overwriting previous memory values*/}
@@ -165,6 +240,9 @@ function Calculator({ memory, setMemory }) {
         <button onClick={() => handleOperatorClick('%')}>%</button>
         <button onClick={handleClearEntry}>CE</button>
         <button onClick={handleAllClear}>C</button>
+        <button onClick={handleReciprocal}>1/x</button>
+        <button onClick={handleSquare}>x²</button>
+        <button onClick={handleSquareRoot}>√x</button>
         <button onClick={() => handleOperatorClick('/')}>/</button>
         <button onClick={() => handleNumberClick('7')}>7</button>
         <button onClick={() => handleNumberClick('8')}>8</button>
@@ -178,7 +256,9 @@ function Calculator({ memory, setMemory }) {
         <button onClick={() => handleNumberClick('2')}>2</button>
         <button onClick={() => handleNumberClick('3')}>3</button>
         <button onClick={() => handleOperatorClick('+')}>+</button>
+        <button onClick={handleNegate}>±</button>
         <button onClick={() => handleNumberClick('0')}>0</button>
+        <button onClick={handleDecimal}>.</button>
         <button onClick={handleCalculate} className="highlighted-button">=</button>
       </div>
     </div>

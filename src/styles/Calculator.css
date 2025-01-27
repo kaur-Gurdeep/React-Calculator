@@ -38,7 +38,6 @@
   }
   
   .buttons {
-    margin-top: 1rem;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.5rem;
@@ -59,12 +58,24 @@
   }
   
   .highlighted-button {
+    grid-column: span 2;
     background-color: orange;
   }
   
   .highlighted-button:hover {
     background-color: #cb9227;
   }
+
+/* Disabled Button Styles */
+button:disabled {
+  background-color: #666;  
+  color: #bbb;  
+  /* cursor: not-allowed;   */
+}
+
+button:disabled:hover {
+  background-color: #666;  
+}
   
   /* Responsive Design */
   @media (max-width: 768px) {
