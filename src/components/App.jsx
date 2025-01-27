@@ -1,38 +1,27 @@
 import React from 'react';
 import { useState } from 'react';
 import Calculator from './Calculator.jsx';
-import History from './History.jsx';
-import Memory from './Memory.jsx';
+import Tabs from './Tabs.jsx';
 import '../styles/App.css';
-import '../styles/Tabs.css'; 
 
 function App() {
-  const [activeTab, changeTab] = useState('Memory');
+  const [memory, setMemory] = useState([]); // Manage memory state
+  const [history, setHistory] = useState([]); //Manage History
+
   return (
     <div className="app-container">
       {/* Calculator Section */}
       <div className="calculator-section">
-        <Calculator />
+        <Calculator 
+        memory={memory} 
+        setMemory={setMemory} 
+        setHistory={setHistory}/>
       </div>
-
       {/* Tabs Section */}
-      <div className="tabs-section">
-        {/* Tabs Buttons */}
-        <div className="tabs">
-          <button className={activeTab == 'Memory' ? 'active-tab' : ''}
-          onClick={() => changeTab('Memory')}>
-            Memory
-          </button>
-          <button className={activeTab == 'History' ? 'active-tab' : ''}
-          onClick={() => changeTab('History')}>
-            History 
-          </button>
-        </div>
-        {/* Tab Content */}
-        <div className="tab-content">
-          {activeTab == 'History' ? <History/> : <Memory/>}
-        </div>     
-      </div> 
+      <Tabs 
+      memory={memory} 
+      setMemory={setMemory} 
+      history={history} />
     </div>
   );
 }

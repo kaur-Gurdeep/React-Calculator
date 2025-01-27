@@ -2,6 +2,7 @@
     display: flex;
     background-color: #333;
     padding: 0.5rem;
+    overflow-x: auto;
   }
   
   .tabs button {
@@ -20,10 +21,11 @@
   }
   
   .tab-content {
-    padding: 1rem;
+    padding: 0.5rem;
+    height: 550px;
   }
   
-  /* Responsive Design */
+   /* Media Query */
   @media (max-width: 768px) {
     .tabs {
       justify-content: center; 
@@ -34,6 +36,9 @@
       flex: unset;
       margin: 0.2rem;
       font-size: 0.9rem; 
+    }
+    .tab-content{
+      height: 100px;
     }
   }
   
